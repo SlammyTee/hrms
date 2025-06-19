@@ -17,6 +17,7 @@
       {% endif %}
 
       {% for field in form %}
+        {% if field.name != 'is_hr' %}
         <div class="mb-3">
           <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
           <div class="input-group">
@@ -42,8 +43,6 @@
               <span class="input-group-text"><i class="fa fa-phone"></i></span>
             {% elif field.name == 'address' %}
               <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
-            {% elif field.name == 'is_hr' %}
-              <span class="input-group-text"><i class="fa fa-user-tie"></i></span>
             {% endif %}
             {{ field|add_class:"form-control" }}
           </div>
@@ -56,6 +55,24 @@
             </div>
           {% endif %}
         </div>
+        {% else %}
+        <div class="mb-3">
+          <label class="form-label d-block">Are you HR? <i class="fa fa-user-tie ms-1"></i></label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="is_hr" id="is_hr_yes" value="True" {% if field.value %}checked{% endif %}>
+            <label class="form-check-label" for="is_hr_yes"><i class="fa fa-check-circle text-success me-1"></i> Yes</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="is_hr" id="is_hr_no" value="False" {% if not field.value %}checked{% endif %}>
+            <label class="form-check-label" for="is_hr_no"><i class="fa fa-times-circle text-danger me-1"></i> No</label>
+          </div>
+          {% if field.errors %}
+            <div class="text-danger small mt-1">
+              {{ field.errors }}
+            </div>
+          {% endif %}
+        </div>
+        {% endif %}
       {% endfor %}
 
       <div class="d-grid mb-3">
