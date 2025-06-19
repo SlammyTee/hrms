@@ -20,7 +20,7 @@ from core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.login_view, name='login'),
+    path('', views.login_view, name='login'),
     path('dashboard_redirect/', views.dashboard_redirect, name='dashboard_redirect'),
     path('logout/', views.logout_view, name='logout'),
     path('register/', views.register_view, name='register'),
