@@ -63,7 +63,7 @@ class Payroll(models.Model):
         super(Payroll, self).save(*args, **kwargs)  # Save the model
     
     def __str__(self):
-        return f"{self.employee.user.username} - {self.month}/{self.year}"
+        return f"{self.employee.user.username} - {self.month}"
 
     
 
