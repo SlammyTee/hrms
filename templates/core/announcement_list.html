@@ -1,0 +1,23 @@
+{% extends "core/base.html" %}
+
+{% block title %}Announcements{% endblock %}
+
+{% block content %}
+<h2>Latest Announcements</h2>
+
+{% if announcements %}
+    <ul>
+        {% for announcement in announcements %}
+            <li>
+                <strong>{{ announcement.title }}</strong><br>
+                {{ announcement.message|linebreaks }}<br>
+                <small>By {{ announcement.created_by }} on {{ announcement.created_at|date:"M d, Y H:i" }}</small>
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No announcements yet.</p>
+{% endif %}
+
+{% endblock %}

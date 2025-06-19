@@ -1,0 +1,72 @@
+{% extends "core/base.html" %}
+{% block title %}Employee List{% endblock %}
+{% block brand_link %}
+<a class="navbar-brand" href="{% url 'hr_dashboard' %}">HRMS</a>
+{% endblock %}
+{% block content %}
+{% include "core/sidebar.html" %}
+<!-- Main Content -->
+  <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-3">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h2>Employee Management</h2>
+      </div>
+
+      <div class="mb-3">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search employees by name or department">
+      </div>
+
+      <div class="table-responsive">
+      <table class="table table-striped table-bordered" id="employeeTable">
+        <thead class="table-dark">
+          <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Designation</th>
+            <th>Join Date</th>
+            <th>Phone</th>
+            <th>HR?</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for emp in employees %}
+          <tr>
+            <td>{{ emp.user.get_full_name }}</td>
+            <td>{{ emp.user.username }}</td>
+            <td>{{ emp.user.email }}</td>
+            <td>{{ emp.department }}</td>
+            <td>{{ emp.designation }}</td>
+            <td>{{ emp.join_date }}</td>
+            <td>{{ emp.phone }}</td>
+            <td>{{ emp.is_hr|yesno:"Yes,No" }}</td>
+            <td>
+              <div class="d-flex gap-1">
+                <a href="{% url 'edit_employee' emp.id %}" class="btn btn-sm btn-outline-primary" title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{% url 'delete_employee' emp.id %}" class="btn btn-sm btn-outline-danger" title="Delete">
+                  <i class="bi bi-trash"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+<script>
+  // Simple client-side table filter
+  document.getElementById('searchInput').addEventListener('keyup', function () {
+    const search = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#employeeTable tbody tr');
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(search) ? '' : 'none';
+    });
+  });
+</script>
+{% endblock %}

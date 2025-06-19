@@ -1,0 +1,91 @@
+{% extends 'core/base.html' %}
+{% block title %}Payroll{% endblock %}
+{% block brand_link %}
+<a class="navbar-brand" href="{% url 'hr_dashboard' %}">HRMS</a>
+{% endblock %}
+{% block content %}
+{% include "core/sidebar.html" %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-3">
+    
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h2>Payroll Management</h2>
+    </div>
+
+    <div class="mb-3 d-flex justify-content-end">
+        <a href="{% url 'add_payroll' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add Payroll
+        </a>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <form method="GET" class="mb-4 d-flex justify-content-between align-items-center flex-wrap">
+        <div class="input-group w-50 mb-2">
+            <input type="text" name="search" class="form-control" placeholder="Search employee..." value="{{ request.GET.search }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+        <div class="mb-2">
+            <select name="status" class="form-select" onchange="this.form.submit()">
+                <option value="">All Statuses</option>
+                <option value="paid" {% if request.GET.status == 'paid' %}selected{% endif %}>Paid</option>
+                <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+            </select>
+        </div>
+    </form>
+
+    <!-- Payroll Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Employee</th>
+                    <th>Designation</th>
+                    <th>Pay Period</th>
+                    <th>Basic Salary</th>
+                    <th>Bonuses</th>
+                    <th>Deductions</th>
+                    <th>Net Pay</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payroll in payrolls %}
+                <tr>
+                    <td>{{ payroll.employee.user.get_full_name }}</td>
+                    <td>{{ payroll.employee.designation }}</td>
+                    <td>{{ payroll.month }}</td>
+                    <td>₦{{ payroll.salary }}</td>
+                    <td>₦{{ payroll.bonus }}</td>
+                    <td>₦{{ payroll.deductions }}</td>
+                    <td><strong>₦{{ payroll.net_pay }}</strong></td>
+                    <td>
+                        {% if payroll.is_paid %}
+                            <span class="badge bg-success">Paid</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a href="{% url 'generate_payslip' payroll.id %}" class="btn btn-sm btn-outline-primary">Payslip</a>
+                            {% if not payroll.is_paid %}
+                            <a href="{% url 'mark_payroll_as_paid' payroll.id %}" class="btn btn-sm btn-success">Mark as Paid</a>
+                        </div>
+                        {% else %}
+                            <button class="btn btn-sm btn-secondary" disabled>Paid</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center">No payroll records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    
+       
+</main>
+{% endblock %}

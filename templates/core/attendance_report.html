@@ -1,0 +1,79 @@
+{% extends 'core/base.html' %}
+{% block title %}Attendance Report{% endblock %}
+{% block brand_link %}
+<a class="navbar-brand" href="{% url 'hr_dashboard' %}">HRMS</a>
+{% endblock %}
+{% block content %}
+{% include "core/sidebar.html" %}
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-3">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h2>Attendance Report</h2>
+        </div>
+
+        <form method="get" class="row g-3 mb-4">
+            <div class="col-md-3">
+                <label for="date" class="form-label">Select Date</label>
+                <input type="date" name="date" id="date" class="form-control" value="{{ request.GET.date }}">
+            </div>
+            <div class="col-md-3">
+                <label for="employee" class="form-label">Employee</label>
+                <select name="employee" id="employee" class="form-select">
+                    <option value="">All</option>
+                    {% for emp in employees %}
+                        <option value="{{ emp.user.username }}" {% if request.GET.employee == emp.id|stringformat:"s" %}selected{% endif %}>{{ emp.user.get_full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 align-self-end">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Date</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if attendance_records %}
+                        {% for record in attendance_records %}
+                            <tr>
+                                <td>{{ record.employee.get_full_name }}</td>
+                                <td>{{ record.date }}</td>
+                                <td>{{ record.check_in|default:"—" }}</td>
+                                <td>{{ record.check_out|default:"—" }}</td>
+                                <td>
+                                    {% if record.status == 'Present' %}
+                                        <span class="badge bg-success">Present</span>
+                                    {% elif record.status == 'Absent' %}
+                                        <span class="badge bg-danger">Absent</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ record.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">No attendance records found.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+
+      
+    </main>
+
+    
+
+    
+{% endblock %}

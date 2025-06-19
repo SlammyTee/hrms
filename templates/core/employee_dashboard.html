@@ -1,0 +1,109 @@
+{% extends "core/base.html" %}
+{% block title %}Employee Dashboard{% endblock %}
+{% block brand_link %}
+<a class="navbar-brand" href="{% url 'hr_dashboard' %}"><b>HRMS</b></a>
+{% endblock %}
+
+{% block content %}
+{% include "core/emp_sidebar.html" %}
+<!-- Main Content -->
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-3">
+  <div class="pt-4 pb-2 mb-3 border-bottom">
+    <h2>Employee Dashboard</h2>
+  </div>
+
+  <!-- Apply for Leave Button -->
+  <div class="mb-3">
+    <a href="{% url 'apply_leave' %}" class="btn btn-success">
+      <i class="bi bi-plus-circle"></i> Apply for Leave
+    </a>
+  </div>
+
+  <!-- Attendance Section -->
+  <div class="card mb-4">
+    <div class="card-header bg-info text-white">
+      Attendance for {{ attendance_day.date }}
+    </div>
+    <div class="card-body">
+      {% if not attendance_day.is_open %}
+      <div class="alert alert-secondary mb-0">
+        Attendance marking is <strong>currently closed</strong>. Please check back later.
+      </div>
+      {% elif has_marked_attendance %}
+      <div class="alert alert-success mb-0">
+        ✅ You have already marked your attendance for today.
+      </div>
+      {% else %}
+      <form method="post" action="{% url 'mark_attendance' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check2-square"></i> Mark Attendance
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Announcements Section -->
+  <div class="card mb-4">
+    <div class="card-header bg-warning text-dark">
+      <i class="bi bi-megaphone-fill"></i> Latest Announcements
+    </div>
+    <div class="card-body">
+      {% if announcements %}
+        {% for announcement in announcements %}
+          <div class="mb-3 border-bottom pb-2">
+            <h5 class="text-primary">{{ announcement.title }}</h5>
+            <p class="mb-1">{{ announcement.message }}</p>
+            <small class="text-muted">Posted on {{ announcement.created_at|date:"M d, Y H:i" }}</small>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="alert alert-info mb-0">
+          No announcements at this time.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <!-- Leave History -->
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      Leave History
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-striped mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if leaves %}
+            {% for leave in leaves %}
+              <tr>
+                <td>{{ leave.start_date }}</td>
+                <td>{{ leave.end_date }}</td>
+                <td>
+                  <span class="badge 
+                    {% if leave.status == 'Pending' %} bg-warning text-dark
+                    {% elif leave.status == 'Approved' %} bg-success
+                    {% elif leave.status == 'Rejected' %} bg-danger
+                    {% endif %}">
+                    {{ leave.status }}
+                  </span>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="3" class="text-center">No leave records found.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+{% endblock %}

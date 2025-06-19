@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+{% include "core/sidebar.html" %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-3">
+    <div class="card shadow-sm border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4>Confirm Deletion</h4>
+        </div>
+        <div class="card-body">
+            <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <a href="{% url 'employee_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+    
+</main>
+{% endblock %}

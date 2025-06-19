@@ -1,0 +1,70 @@
+{% extends "core/base.html" %}
+{% block title %}HR Dashboard{% endblock %}
+{% block brand_link %}
+<a class="navbar-brand" href="{% url 'hr_dashboard' %}"><b>HRMS</b></a>
+{% endblock %}
+
+{% block content %}
+    {% include "core/sidebar.html" %}
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-3">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h2>HR Dashboard</h2>
+      </div>
+      <!-- Alert for pending leave requests -->
+      {% if pending_leaves > 0 %}
+        <div class="alert alert-warning" role="alert">
+          ⚠️ There are {{ pending_leaves }} leave request(s) pending approval.
+          <a href="{% url 'leave_requests' %}" class="alert-link">Review Now</a>
+        </div>
+      {% endif %}
+
+      <!-- Attendance toggle control -->
+      <div class="card mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Attendance Status ({{ attendance_day.date }}) 
+            <span class="badge {% if attendance_day.is_open %}bg-success{% else %}bg-secondary{% endif %}">
+              {% if attendance_day.is_open %}Open{% else %}Closed{% endif %}
+            </span>
+          </h5>
+          <form method="post" action="{% url 'toggle_attendance' %}">
+            {% csrf_token %}
+            {% if attendance_day.is_open %}
+              <button class="btn btn-danger" type="submit">Close Attendance</button>
+            {% else %}
+              <button class="btn btn-success" type="submit">Open Attendance</button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <div class="card text-bg-primary">
+            <div class="card-body">
+              <h5 class="card-title">Total Employees</h5>
+              <p class="card-text fs-4">{{ emp_count }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card text-bg-warning">
+            <div class="card-body">
+              <h5 class="card-title">Pending Leave Requests</h5>
+              <p class="card-text fs-4">{{ pending_leaves }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card text-bg-success">
+            <div class="card-body">
+              <h5 class="card-title">Approved Leaves This Month</h5>
+              <p class="card-text fs-4">{{ approved_leaves }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+{% endblock %}

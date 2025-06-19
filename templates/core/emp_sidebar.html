@@ -1,0 +1,39 @@
+{% with request.resolver_match.url_name as emp_current_url %}
+<!-- Toggle Button (visible only on small screens) -->
+<div class="d-md-none d-flex justify-content-start mt-3">
+    <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
+        aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-list"></i> Toggle Menu
+    </button>
+</div>
+
+<!-- Sidebar -->
+<div class="col-md-3 col-lg-2">
+    <nav id="sidebarMenu" class="collapse d-md-block bg-white text-dark min-vh-100  px-3 py-4">
+        <h6 class="sidebar-heading mb-3 text-muted">Employee Menu</h6>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'employee_dashboard' %}">
+                    <i class="bi bi-house"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'apply_leave' %}">
+                    <i class="bi bi-calendar-plus"></i> Apply for Leave
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'attendance' %}">
+                    <i class="bi bi-clock-history"></i> Attendance History
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'profile' %}">
+                <i class="bi bi-person-lines-fill"></i> Profile
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+{% endwith %}

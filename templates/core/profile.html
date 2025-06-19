@@ -1,0 +1,57 @@
+{% extends "core/base.html" %}
+{% block title %}Profile – {{ employee.full_name }}{% endblock %}
+{% block brand_link %}
+<a class="navbar-brand" href="{% url 'hr_dashboard' %}"><b>HRMS</b></a>
+{% endblock %}
+
+{% block content %}
+{% include "core/emp_sidebar.html" %}
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-3">
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+      <i class="bi bi-person-badge-fill"></i> Employee Profile
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <!-- Avatar or placeholder -->
+        <div class="col-md-3 text-center">
+          <img src="{{ employee.avatar_url|default:'/static/img/avatar_placeholder.png' }}"
+               class="rounded-circle img-fluid shadow-sm" style="max-height: 160px;" alt="Avatar">
+        </div>
+
+        <!-- Personal & Job Details -->
+        <div class="col-md-9">
+          <h4 class="mb-3">{{ employee.full_name }}</h4>
+          <dl class="row">
+            <dt class="col-sm-4">Department:</dt>
+            <dd class="col-sm-8">{{ employee.department }}</dd>
+
+            <dt class="col-sm-4">Designation:</dt>
+            <dd class="col-sm-8">{{ employee.designation }}</dd>
+
+            <dt class="col-sm-4">Employee ID:</dt>
+            <dd class="col-sm-8">{{ employee.id }}</dd>
+
+            <dt class="col-sm-4">Joined On:</dt>
+            <dd class="col-sm-8">{{ employee.join_date|date:"M d, Y" }}</dd>
+
+            <dt class="col-sm-4">Email:</dt>
+            <dd class="col-sm-8">{{ employee.user.email }}</dd>
+
+            <dt class="col-sm-4">Phone:</dt>
+            <dd class="col-sm-8">{{ employee.phone|default:"—" }}</dd>
+
+            <dt class="col-sm-4">Address:</dt>
+            <dd class="col-sm-8">{{ employee.address|default:"—" }}</dd>
+          </dl>
+
+          <a href="{% url 'attendance' %}" class="btn btn-outline-success mt-2">
+            <i class="bi bi-clock-history"></i> View Attendance History
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
