@@ -13,22 +13,22 @@
         <h6 class="sidebar-heading mb-3 text-muted">Employee Menu</h6>
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link text-dark" href="{% url 'employee_dashboard' %}">
+                <a class="nav-link {% if emp_current_url == 'employee_dashboard' %}active bg-dark text-white{% else %}text-dark{% endif %}" href="{% url 'employee_dashboard' %}">
                     <i class="bi bi-house"></i> Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="{% url 'apply_leave' %}">
+                <a class="nav-link {% if emp_current_url == 'apply_leave' %}active bg-dark text-white{% else %}text-dark{% endif %}"" href="{% url 'apply_leave' %}">
                     <i class="bi bi-calendar-plus"></i> Apply for Leave
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="{% url 'attendance' %}">
+                <a class="nav-link {% if emp_current_url == 'attendance' %}active bg-dark text-white{% else %}text-dark{% endif %}"" href="{% url 'attendance' %}">
                     <i class="bi bi-clock-history"></i> Attendance History
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="{% url 'profile' %}">
+                <a class="nav-link {% if emp_current_url == 'profile' %}active bg-dark text-white{% else %}text-dark{% endif %}"" href="{% url 'profile' %}">
                 <i class="bi bi-person-lines-fill"></i> Profile
                 </a>
             </li>
