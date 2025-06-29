@@ -136,7 +136,7 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
-
+ 
 def register_view(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
