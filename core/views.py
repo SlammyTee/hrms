@@ -1,3 +1,4 @@
+import random
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from weasyprint import HTML
@@ -9,6 +10,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import AnnouncementForm, LeaveForm, EmployeeForm, PayrollForm, UserRegisterForm
 from django.utils import timezone
 from django.contrib import messages
+from django.conf import settings
+from django.core.mail import send_mail
+from django.contrib.auth.hashers import make_password
+
 
 @login_required
 def dashboard_redirect(request):
@@ -325,4 +330,67 @@ def my_attendance(request):
     return render(
         request,
         "core/attendance.html", context
+
     )
+
+def password_reset(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+            otp = random.randint(100000, 999999)
+            request.session['reset_email'] = email
+            request.session['otp'] = str(otp)
+
+            # Send OTP via email
+            send_mail(
+                subject='Your Password Reset OTP',
+                message=f'Your OTP for password reset is {otp}',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+            )
+            return redirect('verify_otp')
+        except User.DoesNotExist:
+            messages.error(request, "Email address not found.")
+    return render(request, 'core/password_reset.html')
+
+def verify_otp(request):
+    if request.method == "POST":
+        entered_otp = request.POST.get('otp')
+        new_password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('verify_otp')
+
+        session_otp = request.session.get('otp')
+        email = request.session.get('reset_email')
+
+        if session_otp == entered_otp:
+            user = User.objects.get(email=email)
+            user.password = make_password(new_password)
+            user.save()
+
+            # Cleanup
+            request.session.pop('otp')
+            request.session.pop('reset_email')
+
+            messages.success(request, "Password reset successful. You can now log in.")
+            return redirect('login')
+        else:
+            messages.error(request, "Invalid OTP.")
+    return render(request, 'core/verify_otp.html')
+
+def upload_profile_picture(request, employee_id):
+    employee = get_object_or_404(Employee, pk=employee_id)
+
+    if request.method == 'POST' and request.FILES.get('avatar'):
+        avatar = request.FILES['avatar']
+        employee.avatar = avatar  # Make sure your model has this field
+        employee.save()
+        messages.success(request, 'Profile picture updated successfully.')
+    else:
+        messages.error(request, 'Failed to upload profile picture.')
+
+    return redirect('profile',)  # update to match your profile page URL name

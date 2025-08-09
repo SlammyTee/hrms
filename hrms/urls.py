@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from core import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,16 +35,22 @@ urlpatterns = [
     path('list-announcements/', views.announcement_list, name='announcement_list'),
     path('attendance-report/', views.attendance_report, name='attendance_report'),
     path('leaves/', views.leave_requests, name='leave_requests'),
+    path('password-reset/', views.password_reset, name='password_reset'),
+    path('verify-otp/', views.verify_otp, name='verify_otp'),
     path('apply-leave/', views.apply_leave, name='apply_leave'),
     path('profile/', views.profile, name='profile'),
     path('attendance/', views.my_attendance, name='attendance'),
     path('toggle-attendance/', views.toggle_attendance, name='toggle_attendance'),
     path('mark-attendance/', views.mark_attendance, name='mark_attendance'),
+    path('profile/<int:employee_id>/upload-profile-picture/', views.upload_profile_picture, name='upload_profile_picture'),
     path('leaves/<int:leave_id>/reject/', views.reject_leave, name='reject_leave'),
     path('leave/<int:leave_id>/approve/', views.approve_leave, name='approve_leave'),
     path('employees/<int:employee_id>/edit/', views.edit_employee, name='edit_employee'), 
     path('employees/<int:employee_id>/delete/', views.delete_employee, name='delete_employee'),  
     path('payroll/<int:payroll_id>/generate-payslip/', views.generate_payslip, name='generate_payslip'), 
-    path('payroll/<int:payroll_id>/mark-as-paid/', views.mark_payroll_as_paid, name='mark_payroll_as_paid'), 
+    path('payroll/<int:payroll_id>/mark-as-paid/', views.mark_payroll_as_paid, name='mark_payroll_as_paid'),
+     
 
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

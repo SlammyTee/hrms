@@ -37,8 +37,12 @@
         </div>
       {% endfor %}
 
-      <div class="d-grid mb-3">
+      <div class="d-grid mb-2">
         <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+
+      <div class="text-center mb-3">
+        <a href="{% url 'password_reset' %}" class="small">Forgot Password?</a>
       </div>
 
       <div class="text-center">

@@ -9,6 +9,7 @@ class Employee(models.Model):
     phone = models.CharField(max_length=15)
     address = models.TextField()
     is_hr = models.BooleanField(default=False)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
     def __str__(self):
         return self.user.get_full_name()

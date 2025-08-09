@@ -5,97 +5,111 @@
 <a class="navbar-brand" href="{% url 'login' %}"><b>HRMS</b></a>
 {% endblock %}
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card shadow-lg p-4 w-100 my-5" style="max-width: 500px;">
-    <h2 class="text-center mb-4">Create an Account</h2>
-    <form method="post" novalidate>
-      {% csrf_token %}
-      {% if form.non_field_errors %}
-        <div class="alert alert-danger">
-          {{ form.non_field_errors }}
-        </div>
-      {% endif %}
+<div class="container-fluid py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-lg p-4">
+        <h2 class="text-center mb-4">Create an Account</h2>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
 
-      {% for field in form %}
-        {% if field.name != 'is_hr' and field.name != 'password1' and field.name != 'password2' %}
-        <div class="mb-3">
-          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-          <div class="input-group">
-            {% if field.name == 'username' %}
-              <span class="input-group-text"><i class="fa fa-user"></i></span>
-            {% elif field.name == 'first_name' %}
-              <span class="input-group-text"><i class="fa fa-id-card"></i></span>
-            {% elif field.name == 'last_name' %}
-              <span class="input-group-text"><i class="fa fa-id-card-alt"></i></span>
-            {% elif field.name == 'email' %}
-              <span class="input-group-text"><i class="fa fa-envelope"></i></span>
-            {% elif field.name == 'department' %}
-              <span class="input-group-text"><i class="fa fa-building"></i></span>
-            {% elif field.name == 'designation' %}
-              <span class="input-group-text"><i class="fa fa-briefcase"></i></span>
-            {% elif field.name == 'join_date' %}
-              <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-            {% elif field.name == 'phone' %}
-              <span class="input-group-text"><i class="fa fa-phone"></i></span>
-            {% elif field.name == 'address' %}
-              <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
-            {% endif %}
-            {{ field|add_class:"form-control" }}
-          </div>
-          {% if field.help_text %}
-            <div class="form-text">{{ field.help_text }}</div>
-          {% endif %}
-          {% if field.errors %}
-            <div class="text-danger small">{{ field.errors }}</div>
-          {% endif %}
-        </div>
-        {% elif field.name == 'password1' or field.name == 'password2' %}
-        <div class="mb-3">
-          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="fa fa-lock"></i></span>
-            {{ field|add_class:"form-control password-field" }}
-            <button type="button" class="btn btn-outline-secondary password-toggle" tabindex="-1">
-              <i class="fa fa-eye-slash"></i>
-            </button>
-          </div>
-          {% if field.help_text %}
-            <div class="form-text">{{ field.help_text }}</div>
-          {% endif %}
-          {% if field.errors %}
-            <div class="text-danger small">{{ field.errors }}</div>
-          {% endif %}
-        </div>
-        {% elif field.name == 'is_hr' %}
-        <div class="mb-3">
-          <label class="form-label d-block">Are you HR? <i class="fa fa-user-tie ms-1"></i></label>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="is_hr" id="is_hr_yes" value="True" {% if field.value %}checked{% endif %}>
-            <label class="form-check-label" for="is_hr_yes">
-              <i class="fa fa-check-circle text-success me-1"></i> Yes
-            </label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="is_hr" id="is_hr_no" value="False" {% if not field.value %}checked{% endif %}>
-            <label class="form-check-label" for="is_hr_no">
-              <i class="fa fa-times-circle text-danger me-1"></i> No
-            </label>
-          </div>
-          {% if field.errors %}
-            <div class="text-danger small mt-1">{{ field.errors }}</div>
-          {% endif %}
-        </div>
-        {% endif %}
-      {% endfor %}
+          <div class="row">
+            {% for field in form %}
+              {% if field.name != 'is_hr' and field.name != 'password1' and field.name != 'password2' %}
+              <div class="col-md-6 mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                <div class="input-group">
+                  {% if field.name == 'username' %}
+                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                  {% elif field.name == 'first_name' %}
+                    <span class="input-group-text"><i class="fa fa-id-card"></i></span>
+                  {% elif field.name == 'last_name' %}
+                    <span class="input-group-text"><i class="fa fa-id-card-alt"></i></span>
+                  {% elif field.name == 'email' %}
+                    <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                  {% elif field.name == 'department' %}
+                    <span class="input-group-text"><i class="fa fa-building"></i></span>
+                  {% elif field.name == 'designation' %}
+                    <span class="input-group-text"><i class="fa fa-briefcase"></i></span>
+                  {% elif field.name == 'join_date' %}
+                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                  {% elif field.name == 'phone' %}
+                    <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                  {% elif field.name == 'address' %}
+                    <span class="input-group-text"><i class="fa fa-map-marker-alt"></i></span>
+                  {% endif %}
+                  {{ field|add_class:"form-control" }}
+                </div>
+                {% if field.help_text %}
+                  <div class="form-text">{{ field.help_text }}</div>
+                {% endif %}
+                {% if field.errors %}
+                  <div class="text-danger small">{{ field.errors }}</div>
+                {% endif %}
+              </div>
+              {% endif %}
+            {% endfor %}
 
-      <div class="d-grid mb-3">
-        <button type="submit" class="btn btn-success">Register</button>
+            {% for field in form %}
+              {% if field.name == 'password1' or field.name == 'password2' %}
+              <div class="col-md-12 mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                  {{ field|add_class:"form-control password-field" }}
+                  <button type="button" class="btn btn-outline-secondary password-toggle" tabindex="-1">
+                    <i class="fa fa-eye-slash"></i>
+                  </button>
+                </div>
+                {% if field.help_text %}
+                  <div class="form-text">{{ field.help_text }}</div>
+                {% endif %}
+                {% if field.errors %}
+                  <div class="text-danger small">{{ field.errors }}</div>
+                {% endif %}
+              </div>
+              {% endif %}
+            {% endfor %}
+
+            {% for field in form %}
+              {% if field.name == 'is_hr' %}
+              <div class="col-md-12 mb-3">
+                <label class="form-label d-block">Are you HR? <i class="fa fa-user-tie ms-1"></i></label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="is_hr" id="is_hr_yes" value="True" {% if field.value %}checked{% endif %}>
+                  <label class="form-check-label" for="is_hr_yes">
+                    <i class="fa fa-check-circle text-success me-1"></i> Yes
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="is_hr" id="is_hr_no" value="False" {% if not field.value %}checked{% endif %}>
+                  <label class="form-check-label" for="is_hr_no">
+                    <i class="fa fa-times-circle text-danger me-1"></i> No
+                  </label>
+                </div>
+                {% if field.errors %}
+                  <div class="text-danger small mt-1">{{ field.errors }}</div>
+                {% endif %}
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-success">Register</button>
+          </div>
+
+          <div class="text-center">
+            <small>Already have an account? <a href="{% url 'login' %}">Login here</a></small>
+          </div>
+        </form>
       </div>
-
-      <div class="text-center">
-        <small>Already have an account? <a href="{% url 'login' %}">Login here</a></small>
-      </div>
-    </form>
+    </div>
   </div>
 </div>
 

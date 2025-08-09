@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load static %}
 {% block title %}Profile – {{ employee.full_name }}{% endblock %}
 {% block brand_link %}
 <a class="navbar-brand" href="{% url 'hr_dashboard' %}"><b>HRMS</b></a>
@@ -14,10 +15,20 @@
     </div>
     <div class="card-body">
       <div class="row g-3">
-        <!-- Avatar or placeholder -->
+        <!-- Avatar and Upload Form -->
         <div class="col-md-3 text-center">
-          <img src="{{ employee.avatar_url|default:'/static/img/avatar_placeholder.png' }}"
-               class="rounded-circle img-fluid shadow-sm" style="max-height: 160px;" alt="Avatar">
+          <img src="{% if employee.avatar %}{{ employee.avatar.url }}{% else %}{% static 'img/avatar_placeholder.png' %}{% endif %}"
+               class="rounded-circle img-fluid shadow-sm mb-3"
+               style="max-height: 160px;" alt="Avatar">
+
+          <!-- Upload Form -->
+          <form method="post" enctype="multipart/form-data" action="{% url 'upload_profile_picture' employee.id %}">
+            {% csrf_token %}
+            <div class="mb-2">
+              <input type="file" name="avatar" class="form-control form-control-sm" required>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary">Upload Photo</button>
+          </form>
         </div>
 
         <!-- Personal & Job Details -->
@@ -30,11 +41,11 @@
             <dt class="col-sm-4">Designation:</dt>
             <dd class="col-sm-8">{{ employee.designation }}</dd>
 
-            <dt class="col-sm-4">Employee ID:</dt>
+            <dt class="col-sm-4">Employee ID:</dt>
             <dd class="col-sm-8">{{ employee.id }}</dd>
 
             <dt class="col-sm-4">Joined On:</dt>
-            <dd class="col-sm-8">{{ employee.join_date|date:"M d, Y" }}</dd>
+            <dd class="col-sm-8">{{ employee.join_date|date:"M d, Y" }}</dd>
 
             <dt class="col-sm-4">Email:</dt>
             <dd class="col-sm-8">{{ employee.user.email }}</dd>
