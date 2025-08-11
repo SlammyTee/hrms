@@ -40,6 +40,8 @@
                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                   {% elif field.name == 'phone' %}
                     <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                 
+                  {% endif %}
                   {{ field|add_class:"form-control" }}
                 </div>
                 {% if field.help_text %}
